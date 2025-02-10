@@ -1,0 +1,32 @@
+mkdir -p containers/IMAPP24
+mv CMakeLists.txt main_par.cpp ./containers/IMAPP24
+
+
+sudo dnf check-update
+sudo dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+sudo dnf install docker-ce docker-ce-cli containerd.io
+sudo systemctl start docker
+sudo systemctl enable docker
+sudo usermod -aG docker $USER
+newgrp docker
+
+upload Dockerfile.dev Dockerfile.prod in ~
+
+in $HOME:
+
+docker build -t mandelbrot-dev -f Dockerfile.dev .
+docker run --rm -it -v $HOME/containers/IMAPP24:/workspace mandelbrot-dev bash
+
+now inside the container /workspace:
+mkdir -p build && cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release
+cmake --build .
+./mandelbrot_par
+
+cp mandelbrot_par ..
+
+docker build -t mandelbrot-prod -f Dockerfile.prod .
+docker run --rm -it -v $HOME/containers/IMAPP24:/workspace mandelbrot-prod
+
+
+

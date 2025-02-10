@@ -1,0 +1,9 @@
+Grain Size	Execution Time (ms)
+1	134 ms
+4	94 ms
+8	89 ms
+16	89 ms
+32	87 ms
+64	87 ms
+128	86 ms
+256	86 ms
